@@ -15,20 +15,21 @@ import java.util.ArrayList;
 
 public class GuitarrasMain {
     private Stage stage;
+    private Stage stageOwner;
     private Scene cena;
     private TableView<Guitarra> table = new TableView();
 
-    public GuitarrasMain(Stage stage){
-        this.stage = stage;
+    public GuitarrasMain(Stage stageOwner){
+        this.stageOwner = stageOwner;
     }
 
     public void mostrar(){
         criarUI();
-        this.stage.show();
+        stage.showAndWait();
     }
 
     private void criarUI(){
-        stage.setTitle("Pentatonica");
+        stage.setTitle("Pentatonica - Guitarras");
 
         VBox layout = new VBox();
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");

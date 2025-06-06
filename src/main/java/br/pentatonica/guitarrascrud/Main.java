@@ -12,7 +12,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        GuitarrasMain g = new GuitarrasMain(stage);
-        g.mostrar();
+        Pentatonica p = new Pentatonica(stage);
+        p.mostrar();
     }
 }
