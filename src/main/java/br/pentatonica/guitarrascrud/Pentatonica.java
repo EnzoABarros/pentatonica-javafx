@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -25,8 +26,10 @@ public class Pentatonica {
     public void criarUI() {
         stage.setTitle("Pentatonica");
 
-
-        HBox layout = new HBox();
+        VBox layout = new VBox();
+        HBox botoes = new HBox();
+        layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+        botoes.setSpacing(30);
         Label label = new Label("Pentatonica - CRUDs");
         label.setFont(new Font("Arial", 26));
 
@@ -51,6 +54,9 @@ public class Pentatonica {
             PagamentosMain a = new PagamentosMain(this.stage);
             a.mostrar();
         });
+
+        botoes.getChildren().addAll(guitarras, leiloes, usuarios, pagamentos);
+        layout.getChildren().addAll(label, botoes);
     }
 }
 

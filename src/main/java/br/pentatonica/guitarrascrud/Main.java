@@ -1,6 +1,5 @@
 package br.pentatonica.guitarrascrud;
 
-import br.pentatonica.guitarrascrud.guitarra.controllers.GuitarrasMain;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
