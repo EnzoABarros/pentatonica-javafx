@@ -38,22 +38,13 @@ public class UsuariosMain {
 
         table.setEditable(false);
 
-        TableColumn<Usuario, String> modeloCol = new TableColumn<>("Modelo");
-        modeloCol.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        TableColumn<Usuario, String> nomeCol = new TableColumn<>("Nome");
+        nomeCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
-        TableColumn<Usuario, String> marcaCol = new TableColumn<>("Marca");
-        marcaCol.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        TableColumn<Usuario, String> emailCol = new TableColumn<>("Email");
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        TableColumn<Usuario, Double> precoCol = new TableColumn<>("Preço");
-        precoCol.setCellValueFactory(new PropertyValueFactory<>("preco"));
-
-        TableColumn<Usuario, String> descricaoCol = new TableColumn<>("Descrição");
-        descricaoCol.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-
-        TableColumn<Usuario, String> categoriaCol = new TableColumn<>("Categoria");
-        categoriaCol.setCellValueFactory(new PropertyValueFactory<>("categoria"));
-
-        table.getColumns().addAll(modeloCol, marcaCol, precoCol, descricaoCol, categoriaCol);
+        table.getColumns().addAll(nomeCol, emailCol);
 
         ArrayList<Usuario> usuarios = new ArrayList<>();
         File file = new File("usuarios.dat");
@@ -65,7 +56,7 @@ public class UsuariosMain {
             }
         }
 
-        table.getItems().addAll(guitarras);
+        table.getItems().addAll(usuarios);
 
 
         Button adicionar = new Button("Adicionar");
