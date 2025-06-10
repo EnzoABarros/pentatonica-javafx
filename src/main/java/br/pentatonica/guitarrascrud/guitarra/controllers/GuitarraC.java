@@ -1,11 +1,9 @@
 package br.pentatonica.guitarrascrud.guitarra.controllers;
 
 import br.pentatonica.guitarrascrud.guitarra.Guitarra;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -51,8 +49,10 @@ public class GuitarraC{
         Label descricao = new Label("Descrição:");
         TextField descricaoI = new TextField();
 
-        Label categoria = new Label("Categoria:");
-        TextField categoriaI = new TextField();
+        Label captacao = new Label("Captação:");
+        ChoiceBox captacaoI = new ChoiceBox(FXCollections.observableArrayList(
+                "Elétrica", "Acústica", "")
+        );
 
         Button btnFechar = new Button("Cancelar");
         Button btnAdd = new Button("Adicionar");
@@ -60,25 +60,26 @@ public class GuitarraC{
         btnFechar.setOnAction((event) -> {this.stage.close();});
         btnAdd.setOnAction(actionEvent -> {
             Guitarra g = new Guitarra();
-            g.setModelo(modeloI.getText());
-            g.setMarca(marcaI.getText());
-            while(true){
-                try {
-                    double num = Double.parseDouble(precoI.getText());
-                    g.setPreco(num);
-                    break;
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erro");
-                    alert.setHeaderText("Erro");
-                    alert.setContentText("Tipo de dado incorreto no campo Preço.");
-                    alert.showAndWait();
-
-                    return;
-                }
+            try {
+                g.setModelo(modeloI.getText());
+            } catch (NullPointerException e) {
+                erro("O campo Modelo não pode estar vazio!");
+                return;
+            } try {
+                g.setMarca(marcaI.getText());
+            } catch (NullPointerException e) {
+                erro("O campo Marca não pode estar vazio!");
+                return;
+            }
+            try {
+                double num = Double.parseDouble(precoI.getText());
+                g.setPreco(num);
+            } catch (NumberFormatException e) {
+                erro("Tipo de dado incorreto no campo Preço.");
+                return;
             }
             g.setDescricao(descricaoI.getText());
-            g.setCategoria(categoriaI.getText());
+            g.setCategoria(captacaoI.getValue().toString());
             ArrayList<Guitarra> guitarras = new ArrayList<>();
             File file = new File("guitarras.dat");
             if (file.exists() && file.length() > 0) {
@@ -108,8 +109,16 @@ public class GuitarraC{
         });
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(labelMensagem, modelo, modeloI, marca, marcaI, preco, precoI, descricao, descricaoI, categoria, categoriaI, btnAdd, btnFechar);
+        layout.getChildren().addAll(labelMensagem, modelo, modeloI, marca, marcaI, preco, precoI, descricao, descricaoI, captacao, captacaoI, btnAdd, btnFechar);
         this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
+    }
+
+    private static void erro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText("Erro");
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }

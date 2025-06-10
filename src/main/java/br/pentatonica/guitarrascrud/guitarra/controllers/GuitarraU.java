@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GuitarraU {
     private Stage stage;
@@ -78,6 +79,8 @@ public class GuitarraU {
                     e.printStackTrace();
                 }
             }
+            guitarras.removeIf(g -> Objects.equals(guitarra.getModelo(), g.getModelo()));
+
             guitarra.setModelo(modeloI.getText());
             guitarra.setMarca(marcaI.getText());
             while(true){
@@ -97,8 +100,7 @@ public class GuitarraU {
             }
             guitarra.setDescricao(descricaoI.getText());
             guitarra.setCategoria(categoriaI.getText());
-            System.out.println(guitarra);
-
+            guitarras.add(guitarra);
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("guitarras.dat"));
                 oos.writeObject(guitarras);
