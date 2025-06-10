@@ -3,7 +3,6 @@ package br.pentatonica.guitarrascrud.guitarra;
 import java.io.Serializable;
 
 public class Guitarra implements Serializable{
-    private int id;
     private String modelo;
     private String marca;
     private double preco;
@@ -11,10 +10,6 @@ public class Guitarra implements Serializable{
     private String categoria;
 
     public Guitarra() {}
-
-    public int getId() { return id; }
-
-    public void setId(int id) { this.id = id; }
 
     public String getModelo() {
         return modelo;
@@ -65,5 +60,7 @@ public class Guitarra implements Serializable{
         String e = "Preço: " + preco;
         return a + b + c + d + e;
     }
+
+
 
 }

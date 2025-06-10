@@ -7,6 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -29,7 +30,13 @@ public class GuitarrasMain {
     }
 
     private void criarUI(){
+
+        this.stage = new Stage();
+
         stage.setTitle("Pentatonica - Guitarras");
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(this.stageOwner);
 
         VBox layout = new VBox();
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
@@ -79,15 +86,9 @@ public class GuitarrasMain {
         Button atualizar = new Button("Atualizar tabela");
         atualizar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(85, 22, 128);");
         atualizar.setOnAction((e) -> {
-            if (file.exists() && file.length() > 0) {
-                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                    ArrayList<Guitarra> novasGuitarras = (ArrayList<Guitarra>) ois.readObject();
-                    table.getItems().clear();
-                    table.getItems().addAll(novasGuitarras);
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            ArrayList<Guitarra> novasGuitarras = atualizar(file);
+            table.getItems().clear();
+            table.getItems().addAll(novasGuitarras);
         });
 
         HBox botoes = new HBox();
@@ -95,7 +96,6 @@ public class GuitarrasMain {
 
         Button deletar = new Button("Deletar");
         deletar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(191, 15, 15);");
-        ArrayList<Guitarra> finalGuitarras = guitarras;
         deletar.setOnAction((e) -> {
             Guitarra selecionada = table.getSelectionModel().getSelectedItem();
             if (selecionada == null) {
@@ -107,13 +107,15 @@ public class GuitarrasMain {
                 return;
             }
             GuitarraD g = new GuitarraD();
-            g.deletarGuitarra(finalGuitarras, selecionada);
+            g.deletarGuitarra(atualizar(file), selecionada);
         });
 
         Button editar = new Button("Editar");
         editar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(36, 15, 128);");
         editar.setOnAction((e) -> {
-
+            Guitarra selecionada = table.getSelectionModel().getSelectedItem();
+            GuitarraU edit = new GuitarraU(this.stage);
+            edit.mostrar(selecionada);
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);
@@ -122,5 +124,17 @@ public class GuitarrasMain {
         layout.getChildren().add(botoes);
         this.cena = new Scene(layout, 800, 500);
         this.stage.setScene(this.cena);
+    }
+
+    private static ArrayList atualizar(File file) {
+        ArrayList<Guitarra> novasGuitarras = new ArrayList<>();
+        if (file.exists() && file.length() > 0) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                novasGuitarras = (ArrayList<Guitarra>) ois.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return novasGuitarras;
     }
 }
