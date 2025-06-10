@@ -7,10 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GuitarraD {
     public void deletarGuitarra(ArrayList<Guitarra> guitarras, Guitarra guitarra) {
-        guitarras.remove(guitarra);
+        String modelo = guitarra.getModelo();
+        guitarras.removeIf(g -> Objects.equals(modelo, g.getModelo()));
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("guitarras.dat"));
             oos.writeObject(guitarras);

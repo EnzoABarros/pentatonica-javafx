@@ -1,6 +1,6 @@
-package br.pentatonica.guitarrascrud.guitarra.controllers;
+package br.pentatonica.guitarrascrud.usuarios.controllers;
 
-import br.pentatonica.guitarrascrud.guitarra.Guitarra;
+import br.pentatonica.guitarrascrud.usuarios.Usuario;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -31,73 +31,59 @@ public class UsuariosC{
     private void criarUI(){
 
         this.stage = new Stage();
-        stage.setTitle("Adicionar guitarra");
+        stage.setTitle("Criar usuario");
 
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(this.stageOwner);
 
-        Label labelMensagem = new Label("Adicionar Guitarra");
+        Label labelMensagem = new Label("Criar usuario");
         labelMensagem.setFont(new Font("Arial",26));
 
-        Label modelo = new Label("Modelo:");
-        TextField modeloI = new TextField();
+        Label nome = new Label("Nome:");
+        TextField nomeI = new TextField();
 
-        Label marca = new Label("Marca:");
-        TextField marcaI = new TextField();
+        Label CPF = new Label("CPF:");
+        TextField CPFI = new TextField();
 
-        Label preco = new Label("Preço:");
-        TextField precoI = new TextField();
+        Label email = new Label("Email:");
+        TextField emailI = new TextField();
 
-        Label descricao = new Label("Descrição:");
-        TextField descricaoI = new TextField();
-
-        Label categoria = new Label("Categoria:");
-        TextField categoriaI = new TextField();
+        Label senha = new Label("Senha:");
+        TextField senhaI = new TextField();
 
         Button btnFechar = new Button("Cancelar");
         Button btnAdd = new Button("Adicionar");
 
         btnFechar.setOnAction((event) -> {this.stage.close();});
         btnAdd.setOnAction(actionEvent -> {
-            Guitarra g = new Guitarra();
-            g.setModelo(modeloI.getText());
-            g.setMarca(marcaI.getText());
+            Usuario u = new Usuario();
+            u.setNome(nomeI.getText());
+            u.setEmail(emailI.getText());
+            u.setSenha(senhaI.getText());
             while(true){
                 try {
-                    double num = Double.parseDouble(precoI.getText());
-                    g.setPreco(num);
+                    int num = Integer.parseInt(CPFI.getText());
+                    u.setCPF(num);
                     break;
                 } catch (NumberFormatException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erro");
                     alert.setHeaderText("Erro");
-                    alert.setContentText("Tipo de dado incorreto no campo Preço.");
+                    alert.setContentText("Tipo de dado incorreto no campo CPF.");
                     alert.showAndWait();
 
                     return;
                 }
             }
-            g.setDescricao(descricaoI.getText());
-            g.setCategoria(categoriaI.getText());
-            ArrayList<Guitarra> guitarras = new ArrayList<>();
-            File file = new File("guitarras.dat");
-            if (file.exists() && file.length() > 0) {
-                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                    guitarras = (ArrayList<Guitarra>) ois.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            guitarras.add(g);
-
+            ArrayList<Usuario> usuarios = new ArrayList<>();
             try {
-                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("guitarras.dat"));
-                oos.writeObject(guitarras);
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));
+                oos.writeObject(usuarios);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Sucesso!");
                 alert.setHeaderText("Sucesso!");
-                alert.setContentText("Guitarra cadastrada com sucesso!");
+                alert.setContentText("Usuario cadastrado com sucesso!");
                 alert.showAndWait();
                 oos.close();
                 this.stage.close();
@@ -108,7 +94,7 @@ public class UsuariosC{
         });
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(labelMensagem, modelo, modeloI, marca, marcaI, preco, precoI, descricao, descricaoI, categoria, categoriaI, btnAdd, btnFechar);
+        layout.getChildren().addAll(labelMensagem, nome, nomeI, CPF, CPFI, email, emailI, senha, senhaI, btnAdd, btnFechar);
         this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
     }

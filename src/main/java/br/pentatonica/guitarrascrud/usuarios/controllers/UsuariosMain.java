@@ -16,7 +16,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class UsuariosMain {
-    private Scene cena;
+    /*private Scene cena;
     private Stage stage;
     private Stage stageOwner;
     private TableView<Usuario> table = new TableView();
@@ -112,5 +112,5 @@ public class UsuariosMain {
         layout.getChildren().add(botoes);
         this.cena = new Scene(layout, 800, 500);
         this.stage.setScene(this.cena);
-    }
+    }*/
 }
