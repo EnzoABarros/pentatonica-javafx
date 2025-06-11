@@ -119,7 +119,9 @@ public class UsuariosMain {
         Button editar = new Button("Editar");
         editar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(36, 15, 128);");
         editar.setOnAction((e) -> {
-
+            Usuario selecionada = table.getSelectionModel().getSelectedItem();
+            UsuariosU edit = new UsuariosU(this.stage);
+            edit.mostrar(selecionada);
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);

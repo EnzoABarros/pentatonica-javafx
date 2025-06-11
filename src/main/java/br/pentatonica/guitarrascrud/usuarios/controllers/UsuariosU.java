@@ -53,6 +53,7 @@ public class UsuariosU {
 
         Label CPF = new Label("CPF:");
         TextField CPFI = new TextField();
+        CPFI.setText(usuario.getCPF());
 
         Button btnFechar = new Button("Cancelar");
         Button btnEdit = new Button("Atualizar");
@@ -68,6 +69,9 @@ public class UsuariosU {
                     e.printStackTrace();
                 }
             }
+
+            usuarios.removeIf(u -> u.getCPF() == usuario.getCPF());
+
             usuario.setNome(nomeI.getText());
             usuario.setEmail(emailI.getText());
             usuario.setSenha(senhaI.getText());
