@@ -54,8 +54,8 @@ public class Pentatonica {
            // a.mostrar();
         });
         pagamentos.setOnAction((e) -> {
-            //PagamentosMain a = new PagamentosMain(this.stage);
-            //a.mostrar();
+            PagamentosMain a = new PagamentosMain(this.stage);
+            a.mostrar();
         });
 
         botoes.getChildren().addAll(guitarras, leiloes, usuarios, pagamentos);

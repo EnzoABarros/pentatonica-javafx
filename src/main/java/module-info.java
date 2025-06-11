@@ -9,4 +9,10 @@ module br.pentatonica.guitarrascrud {
     opens br.pentatonica.guitarrascrud.guitarra.controllers to javafx.fxml;
     opens br.pentatonica.guitarrascrud.guitarra to javafx.fxml;
     exports br.pentatonica.guitarrascrud.guitarra;
+
+    exports br.pentatonica.guitarrascrud.pagamentos;
+    opens br.pentatonica.guitarrascrud.pagamentos to javafx.fxml;
+    exports br.pentatonica.guitarrascrud.pagamentos.controllers;
+    opens br.pentatonica.guitarrascrud.pagamentos.controllers to javafx.fxml;
+
 }
