@@ -1,5 +1,6 @@
 package br.pentatonica.guitarrascrud.usuarios.controllers;
 
+import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 import br.pentatonica.guitarrascrud.usuarios.Usuario;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -63,6 +64,17 @@ public class UsuariosC{
             u.setCPF(CPFI.getText());
 
             ArrayList<Usuario> usuarios = new ArrayList<>();
+            File file = new File("usuarios.dat");
+            if (file.exists() && file.length() > 0) {
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                    usuarios = (ArrayList<Usuario>) ois.readObject();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            usuarios.add(u);
+
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));
                 oos.writeObject(usuarios);

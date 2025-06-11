@@ -57,7 +57,7 @@ public class UsuariosMain {
         TableColumn<Usuario, String> senhaCol = new TableColumn<>("Senha");
         senhaCol.setCellValueFactory(new PropertyValueFactory<>("senha"));
 
-        TableColumn<Usuario, Integer> cpfCol = new TableColumn<>("CPF");
+        TableColumn<Usuario, String> cpfCol = new TableColumn<>("CPF");
         cpfCol.setCellValueFactory(new PropertyValueFactory<>("CPF"));
 
         table.getColumns().addAll(nomeCol, emailCol, senhaCol, cpfCol);

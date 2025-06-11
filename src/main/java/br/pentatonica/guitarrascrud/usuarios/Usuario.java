@@ -1,17 +1,14 @@
 package br.pentatonica.guitarrascrud.usuarios;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable{
     private String nome;
     private String email;
     private String senha;
     private String CPF;
 
-    public Usuario() {
-        this.nome = "";
-        this.email = "";
-        this.senha = "";
-        this.CPF = "";
-    }
+    public Usuario() {}
 
     public String getNome() {
         return nome;
