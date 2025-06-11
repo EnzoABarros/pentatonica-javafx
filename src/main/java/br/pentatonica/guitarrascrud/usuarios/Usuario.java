@@ -4,13 +4,13 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
-    private int CPF;
+    private String CPF;
 
     public Usuario() {
         this.nome = "";
         this.email = "";
         this.senha = "";
-        this.CPF = 0;
+        this.CPF = "";
     }
 
     public String getNome() {
@@ -37,11 +37,11 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public int getCPF() {
+    public String getCPF() {
         return CPF;
     }
 
-    public void setCPF(int CPF) {
+    public void setCPF(String CPF) {
         this.CPF = CPF;
     }
 }

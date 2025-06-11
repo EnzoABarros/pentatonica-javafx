@@ -60,21 +60,7 @@ public class UsuariosC{
             u.setNome(nomeI.getText());
             u.setEmail(emailI.getText());
             u.setSenha(senhaI.getText());
-            while(true){
-                try {
-                    int num = Integer.parseInt(CPFI.getText());
-                    u.setCPF(num);
-                    break;
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erro");
-                    alert.setHeaderText("Erro");
-                    alert.setContentText("Tipo de dado incorreto no campo CPF.");
-                    alert.showAndWait();
-
-                    return;
-                }
-            }
+            u.setCPF(CPFI.getText());
 
             ArrayList<Usuario> usuarios = new ArrayList<>();
             try {

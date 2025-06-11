@@ -7,6 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -16,11 +17,14 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class UsuariosMain {
-    /*private Scene cena;
+    private Scene cena;
     private Stage stage;
     private Stage stageOwner;
     private TableView<Usuario> table = new TableView();
 
+    public UsuariosMain(Stage stage) {
+        this.stageOwner = stageOwner;
+    }
 
     public void mostrar(){
         criarUI();
@@ -28,7 +32,13 @@ public class UsuariosMain {
     }
 
     private void criarUI(){
+
+        this.stage = new Stage();
+
         stage.setTitle("Pentatonica - Usuários");
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(this.stageOwner);
 
         VBox layout = new VBox();
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
@@ -38,22 +48,19 @@ public class UsuariosMain {
 
         table.setEditable(false);
 
-        TableColumn<Usuario, String> modeloCol = new TableColumn<>("Modelo");
-        modeloCol.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        TableColumn<Usuario, String> nomeCol = new TableColumn<>("Nome");
+        nomeCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
-        TableColumn<Usuario, String> marcaCol = new TableColumn<>("Marca");
-        marcaCol.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        TableColumn<Usuario, String> emailCol = new TableColumn<>("Email");
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        TableColumn<Usuario, Double> precoCol = new TableColumn<>("Preço");
-        precoCol.setCellValueFactory(new PropertyValueFactory<>("preco"));
+        TableColumn<Usuario, String> senhaCol = new TableColumn<>("Senha");
+        senhaCol.setCellValueFactory(new PropertyValueFactory<>("senha"));
 
-        TableColumn<Usuario, String> descricaoCol = new TableColumn<>("Descrição");
-        descricaoCol.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        TableColumn<Usuario, Integer> cpfCol = new TableColumn<>("CPF");
+        cpfCol.setCellValueFactory(new PropertyValueFactory<>("CPF"));
 
-        TableColumn<Usuario, String> categoriaCol = new TableColumn<>("Categoria");
-        categoriaCol.setCellValueFactory(new PropertyValueFactory<>("categoria"));
-
-        table.getColumns().addAll(modeloCol, marcaCol, precoCol, descricaoCol, categoriaCol);
+        table.getColumns().addAll(nomeCol, emailCol, senhaCol, cpfCol);
 
         ArrayList<Usuario> usuarios = new ArrayList<>();
         File file = new File("usuarios.dat");
@@ -65,7 +72,7 @@ public class UsuariosMain {
             }
         }
 
-        table.getItems().addAll(guitarras);
+        table.getItems().addAll(usuarios);
 
 
         Button adicionar = new Button("Adicionar");
@@ -119,7 +126,8 @@ public class UsuariosMain {
 
         layout.getChildren().addAll(label, atualizar, table);
         layout.getChildren().add(botoes);
+
         this.cena = new Scene(layout, 800, 500);
         this.stage.setScene(this.cena);
-    }*/
+    }
 }

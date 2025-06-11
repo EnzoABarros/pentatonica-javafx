@@ -50,8 +50,8 @@ public class Pentatonica {
             //a.mostrar();
         });
         usuarios.setOnAction((e) -> {
-           // UsuariosMain a = new UsuariosMain(this.stage);
-           // a.mostrar();
+           UsuariosMain a = new UsuariosMain(this.stage);
+           a.mostrar();
         });
         pagamentos.setOnAction((e) -> {
             PagamentosMain a = new PagamentosMain(this.stage);
