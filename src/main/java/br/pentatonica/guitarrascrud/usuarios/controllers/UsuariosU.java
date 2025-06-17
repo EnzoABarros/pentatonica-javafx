@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UsuariosU {
     private Stage stage;
@@ -53,12 +54,7 @@ public class UsuariosU {
 
         Label CPF = new Label("CPF:");
         TextField CPFI = new TextField();
-        try {
-            String cpfTexto = Integer.toString(usuario.getCPF());
-            CPFI.setText(cpfTexto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        CPFI.setText(usuario.getCPF());
 
         Button btnFechar = new Button("Cancelar");
         Button btnEdit = new Button("Atualizar");
@@ -74,25 +70,14 @@ public class UsuariosU {
                     e.printStackTrace();
                 }
             }
+
+            usuarios.removeIf(u -> Objects.equals(u.getCPF(), usuario.getCPF()));
+
             usuario.setNome(nomeI.getText());
             usuario.setEmail(emailI.getText());
             usuario.setSenha(senhaI.getText());
-            while(true){
-                try {
-                    int num = Integer.parseInt(CPFI.getText());
-                    usuario.setCPF(num);
-                    break;
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erro");
-                    alert.setHeaderText("Erro");
-                    alert.setContentText("Tipo de dado incorreto no campo CPF.");
-                    alert.showAndWait();
-
-                    return;
-                }
-            }
-            System.out.println(usuarios);
+            usuario.setSenha(CPFI.getText());
+            usuarios.add(usuario);
 
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));

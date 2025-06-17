@@ -1,5 +1,7 @@
+
 package br.pentatonica.guitarrascrud.leiloes.controllers;
 
+import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 import br.pentatonica.guitarrascrud.leiloes.Leilao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +16,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class LeiloesC {
-    /*private Stage stage;
+    private Stage stage;
     private Stage stageOwner;
     private Scene cena;
 
@@ -45,10 +47,21 @@ public class LeiloesC {
         TextField descricaoInput = new TextField();
         descricaoInput.setPromptText("Descrição");
 
-        Button btnSalvar = new Button("Salvar");
-        btnSalvar.setOnAction(e -> {
+        Label dataLabel = new Label("Data");
+        DatePicker dataPicker = new DatePicker();
+        dataPicker.setPromptText("Selecione a data");
+
+        Button btnCriar = new Button("Criar");
+        Button btnFechar = new Button("Cancelar");
+
+        btnFechar.setOnAction((event) -> this.stage.close());
+
+        btnCriar.setOnAction(e -> {
             Leilao leilao = new Leilao();
             leilao.setNome(nomeInput.getText());
+            try {
+                double num = Double.parseDouble(lanceInput.getText());
+            }
             leilao.setDescricao(descricaoInput.getText());
 
             try {
@@ -94,5 +107,7 @@ public class LeiloesC {
 
         this.cena = new Scene(layout, 500, 600);
         this.stage.setScene(this.cena);
-    }*/
+    }
 }
+
+

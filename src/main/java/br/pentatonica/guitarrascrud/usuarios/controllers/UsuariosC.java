@@ -1,5 +1,6 @@
 package br.pentatonica.guitarrascrud.usuarios.controllers;
 
+import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 import br.pentatonica.guitarrascrud.usuarios.Usuario;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -60,23 +61,20 @@ public class UsuariosC{
             u.setNome(nomeI.getText());
             u.setEmail(emailI.getText());
             u.setSenha(senhaI.getText());
-            while(true){
-                try {
-                    int num = Integer.parseInt(CPFI.getText());
-                    u.setCPF(num);
-                    break;
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erro");
-                    alert.setHeaderText("Erro");
-                    alert.setContentText("Tipo de dado incorreto no campo CPF.");
-                    alert.showAndWait();
+            u.setCPF(CPFI.getText());
 
-                    return;
+            ArrayList<Usuario> usuarios = new ArrayList<>();
+            File file = new File("usuarios.dat");
+            if (file.exists() && file.length() > 0) {
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                    usuarios = (ArrayList<Usuario>) ois.readObject();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
 
-            ArrayList<Usuario> usuarios = new ArrayList<>();
+            usuarios.add(u);
+
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));
                 oos.writeObject(usuarios);

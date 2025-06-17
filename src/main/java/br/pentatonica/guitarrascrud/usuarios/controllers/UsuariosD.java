@@ -7,10 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UsuariosD {
     public void deletarUsuario(ArrayList<Usuario> usuarios, Usuario usuario) {
-        usuarios.remove(usuario);
+        String cpf = usuario.getCPF();
+        usuarios.removeIf(u -> Objects.equals(cpf, u.getCPF()));
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));
             oos.writeObject(usuarios);

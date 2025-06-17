@@ -1,5 +1,6 @@
 package br.pentatonica.guitarrascrud.usuarios.controllers;
 
+import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 import br.pentatonica.guitarrascrud.usuarios.Usuario;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -7,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -16,11 +18,14 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class UsuariosMain {
-    /*private Scene cena;
+    private Scene cena;
     private Stage stage;
     private Stage stageOwner;
     private TableView<Usuario> table = new TableView();
 
+    public UsuariosMain(Stage stage) {
+        this.stageOwner = stageOwner;
+    }
 
     public void mostrar(){
         criarUI();
@@ -28,7 +33,13 @@ public class UsuariosMain {
     }
 
     private void criarUI(){
+
+        this.stage = new Stage();
+
         stage.setTitle("Pentatonica - Usuários");
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(this.stageOwner);
 
         VBox layout = new VBox();
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
@@ -44,7 +55,13 @@ public class UsuariosMain {
         TableColumn<Usuario, String> emailCol = new TableColumn<>("Email");
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        table.getColumns().addAll(nomeCol, emailCol);
+        TableColumn<Usuario, String> senhaCol = new TableColumn<>("Senha");
+        senhaCol.setCellValueFactory(new PropertyValueFactory<>("senha"));
+
+        TableColumn<Usuario, String> cpfCol = new TableColumn<>("CPF");
+        cpfCol.setCellValueFactory(new PropertyValueFactory<>("CPF"));
+
+        table.getColumns().addAll(nomeCol, emailCol, senhaCol, cpfCol);
 
         ArrayList<Usuario> usuarios = new ArrayList<>();
         File file = new File("usuarios.dat");
@@ -64,20 +81,7 @@ public class UsuariosMain {
         adicionar.setOnAction((e) -> {
             UsuariosC create = new UsuariosC(this.stage);
             create.mostrar();
-        });
-
-        Button atualizar = new Button("Atualizar tabela");
-        atualizar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(85, 22, 128);");
-        atualizar.setOnAction((e) -> {
-            if (file.exists() && file.length() > 0) {
-                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                    ArrayList<Usuario> novosUsuarios = (ArrayList<Usuario>) ois.readObject();
-                    table.getItems().clear();
-                    table.getItems().addAll(novosUsuarios);
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            atualizarTabela(file);
         });
 
         HBox botoes = new HBox();
@@ -85,7 +89,6 @@ public class UsuariosMain {
 
         Button deletar = new Button("Deletar");
         deletar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(191, 15, 15);");
-        ArrayList<Usuario> finalUsuarios = usuarios;
         deletar.setOnAction((e) -> {
             Usuario selection = table.getSelectionModel().getSelectedItem();
             if (selection == null) {
@@ -97,20 +100,44 @@ public class UsuariosMain {
                 return;
             }
             UsuariosD u = new UsuariosD();
-            u.deletarUsuario(finalUsuarios, selection);
+            u.deletarUsuario(atualizar(file), selection);
+            atualizarTabela(file);
         });
 
         Button editar = new Button("Editar");
         editar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(36, 15, 128);");
         editar.setOnAction((e) -> {
-
+            Usuario selecionada = table.getSelectionModel().getSelectedItem();
+            UsuariosU edit = new UsuariosU(this.stage);
+            edit.mostrar(selecionada);
+            atualizarTabela(file);
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);
 
-        layout.getChildren().addAll(label, atualizar, table);
+        layout.getChildren().addAll(label, table);
         layout.getChildren().add(botoes);
+
         this.cena = new Scene(layout, 800, 500);
         this.stage.setScene(this.cena);
-    }*/
+    }
+
+    private static ArrayList atualizar(File file) {
+        ArrayList<Usuario> novosUsuarios = new ArrayList<>();
+        if (file.exists() && file.length() > 0) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                novosUsuarios = (ArrayList<Usuario>) ois.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return novosUsuarios;
+    }
+
+    private void atualizarTabela(File file) {
+        ArrayList<Usuario> novosUsuarios = atualizar(file);
+        table.getItems().clear();
+        table.getItems().addAll(novosUsuarios);
+    }
+
 }
