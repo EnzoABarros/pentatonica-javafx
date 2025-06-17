@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UsuariosU {
     private Stage stage;
@@ -70,12 +71,13 @@ public class UsuariosU {
                 }
             }
 
-            usuarios.removeIf(u -> u.getCPF() == usuario.getCPF());
+            usuarios.removeIf(u -> Objects.equals(u.getCPF(), usuario.getCPF()));
 
             usuario.setNome(nomeI.getText());
             usuario.setEmail(emailI.getText());
             usuario.setSenha(senhaI.getText());
             usuario.setSenha(CPFI.getText());
+            usuarios.add(usuario);
 
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));

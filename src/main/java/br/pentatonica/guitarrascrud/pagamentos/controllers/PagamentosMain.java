@@ -89,10 +89,6 @@ public class PagamentosMain {
             atualizarTabela(file);
         });
 
-        Button atualizar = new Button("Atualizar tabela");
-        atualizar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(85, 22, 128);");
-        atualizar.setOnAction((e) -> atualizarTabela(file));
-
         HBox botoes = new HBox();
         botoes.setSpacing(10);
 
@@ -131,7 +127,7 @@ public class PagamentosMain {
             atualizarTabela(file);
         });
 
-        botoes.getChildren().addAll(adicionar, deletar, editar, atualizar);
+        botoes.getChildren().addAll(adicionar, deletar, editar);
 
         layout.getChildren().addAll(label, table, botoes);
         this.cena = new Scene(layout, 800, 500);

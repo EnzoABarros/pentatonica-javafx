@@ -81,18 +81,10 @@ public class GuitarrasMain {
         adicionar.setOnAction((e) -> {
             GuitarraC create = new GuitarraC(this.stage);
             create.mostrar();
-        });
-
-        Button atualizar = new Button("Atualizar tabela");
-        atualizar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(85, 22, 128);");
-        atualizar.setOnAction((e) -> {
-            ArrayList<Guitarra> novasGuitarras = atualizar(file);
-            table.getItems().clear();
-            table.getItems().addAll(novasGuitarras);
+            atualizarTabela(file);
         });
 
         HBox botoes = new HBox();
-
 
         Button deletar = new Button("Deletar");
         deletar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(191, 15, 15);");
@@ -108,6 +100,7 @@ public class GuitarrasMain {
             }
             GuitarraD g = new GuitarraD();
             g.deletarGuitarra(atualizar(file), selecionada);
+            atualizarTabela(file);
         });
 
         Button editar = new Button("Editar");
@@ -116,11 +109,12 @@ public class GuitarrasMain {
             Guitarra selecionada = table.getSelectionModel().getSelectedItem();
             GuitarraU edit = new GuitarraU(this.stage);
             edit.mostrar(selecionada);
+            atualizarTabela(file);
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);
 
-        layout.getChildren().addAll(label, atualizar, table);
+        layout.getChildren().addAll(label, table);
         layout.getChildren().add(botoes);
         this.cena = new Scene(layout, 800, 500);
         this.stage.setScene(this.cena);
@@ -136,5 +130,11 @@ public class GuitarrasMain {
             }
         }
         return novasGuitarras;
+    }
+
+    private void atualizarTabela(File file) {
+        ArrayList<Guitarra> novasGuitarras = atualizar(file);
+        table.getItems().clear();
+        table.getItems().addAll(novasGuitarras);
     }
 }

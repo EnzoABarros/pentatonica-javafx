@@ -1,10 +1,7 @@
 
 package br.pentatonica.guitarrascrud.leiloes.controllers;
 
-<<<<<<< Updated upstream
-=======
 import br.pentatonica.guitarrascrud.guitarra.Guitarra;
->>>>>>> Stashed changes
 import br.pentatonica.guitarrascrud.leiloes.Leilao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,11 +16,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class LeiloesC {
-<<<<<<< Updated upstream
-    /*private Stage stage;
-=======
     private Stage stage;
->>>>>>> Stashed changes
     private Stage stageOwner;
     private Scene cena;
 
@@ -54,28 +47,21 @@ public class LeiloesC {
         TextField descricaoInput = new TextField();
         descricaoInput.setPromptText("Descrição");
 
-<<<<<<< Updated upstream
-=======
-        ArrayList<Guitarra> guitarrasDisponiveis = new ArrayList<>();
-        File fileG = new File("guitarras.dat");
-        if (fileG.exists() && fileG.length() > 0) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileG))) {
-                guitarrasDisponiveis = (ArrayList<Guitarra>) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+        Label dataLabel = new Label("Data");
+        DatePicker dataPicker = new DatePicker();
+        dataPicker.setPromptText("Selecione a data");
 
-        ListView<Guitarra> listView = new ListView<>();
-        ObservableList<Guitarra> obsList = FXCollections.observableArrayList(guitarrasDisponiveis);
-        listView.setItems(obsList);
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        Button btnCriar = new Button("Criar");
+        Button btnFechar = new Button("Cancelar");
 
->>>>>>> Stashed changes
-        Button btnSalvar = new Button("Salvar");
-        btnSalvar.setOnAction(e -> {
+        btnFechar.setOnAction((event) -> this.stage.close());
+
+        btnCriar.setOnAction(e -> {
             Leilao leilao = new Leilao();
             leilao.setNome(nomeInput.getText());
+            try {
+                double num = Double.parseDouble(lanceInput.getText());
+            }
             leilao.setDescricao(descricaoInput.getText());
 
             try {
@@ -121,10 +107,7 @@ public class LeiloesC {
 
         this.cena = new Scene(layout, 500, 600);
         this.stage.setScene(this.cena);
-<<<<<<< Updated upstream
-    }*/
-}
-=======
     }
 }
->>>>>>> Stashed changes
+
+

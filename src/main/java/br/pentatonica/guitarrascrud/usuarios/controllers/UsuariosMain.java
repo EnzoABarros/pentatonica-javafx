@@ -1,5 +1,6 @@
 package br.pentatonica.guitarrascrud.usuarios.controllers;
 
+import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 import br.pentatonica.guitarrascrud.usuarios.Usuario;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -80,20 +81,7 @@ public class UsuariosMain {
         adicionar.setOnAction((e) -> {
             UsuariosC create = new UsuariosC(this.stage);
             create.mostrar();
-        });
-
-        Button atualizar = new Button("Atualizar tabela");
-        atualizar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(85, 22, 128);");
-        atualizar.setOnAction((e) -> {
-            if (file.exists() && file.length() > 0) {
-                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                    ArrayList<Usuario> novosUsuarios = (ArrayList<Usuario>) ois.readObject();
-                    table.getItems().clear();
-                    table.getItems().addAll(novosUsuarios);
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            atualizarTabela(file);
         });
 
         HBox botoes = new HBox();
@@ -101,7 +89,6 @@ public class UsuariosMain {
 
         Button deletar = new Button("Deletar");
         deletar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(191, 15, 15);");
-        ArrayList<Usuario> finalUsuarios = usuarios;
         deletar.setOnAction((e) -> {
             Usuario selection = table.getSelectionModel().getSelectedItem();
             if (selection == null) {
@@ -113,7 +100,8 @@ public class UsuariosMain {
                 return;
             }
             UsuariosD u = new UsuariosD();
-            u.deletarUsuario(finalUsuarios, selection);
+            u.deletarUsuario(atualizar(file), selection);
+            atualizarTabela(file);
         });
 
         Button editar = new Button("Editar");
@@ -122,14 +110,34 @@ public class UsuariosMain {
             Usuario selecionada = table.getSelectionModel().getSelectedItem();
             UsuariosU edit = new UsuariosU(this.stage);
             edit.mostrar(selecionada);
+            atualizarTabela(file);
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);
 
-        layout.getChildren().addAll(label, atualizar, table);
+        layout.getChildren().addAll(label, table);
         layout.getChildren().add(botoes);
 
         this.cena = new Scene(layout, 800, 500);
         this.stage.setScene(this.cena);
     }
+
+    private static ArrayList atualizar(File file) {
+        ArrayList<Usuario> novosUsuarios = new ArrayList<>();
+        if (file.exists() && file.length() > 0) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                novosUsuarios = (ArrayList<Usuario>) ois.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return novosUsuarios;
+    }
+
+    private void atualizarTabela(File file) {
+        ArrayList<Usuario> novosUsuarios = atualizar(file);
+        table.getItems().clear();
+        table.getItems().addAll(novosUsuarios);
+    }
+
 }

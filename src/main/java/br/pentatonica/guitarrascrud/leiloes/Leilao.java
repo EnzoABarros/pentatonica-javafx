@@ -2,16 +2,16 @@ package br.pentatonica.guitarrascrud.leiloes;
 
 import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Leilao{
     private String nome;
     private String descricao;
     private double lanceInicial;
-    private ArrayList<Guitarra> guitarras;
+    private LocalDateTime dataFim;
 
     public Leilao() {
-        this.guitarras = new ArrayList<>();
     }
 
     public String getNome() {
@@ -38,12 +38,12 @@ public class Leilao{
         this.lanceInicial = lanceInicial;
     }
 
-    public ArrayList<Guitarra> getGuitarras() {
-        return guitarras;
+    public LocalDateTime getDataFim() {
+        return dataFim;
     }
 
-    public void setGuitarras(ArrayList<Guitarra> guitarras) {
-        this.guitarras = guitarras;
+    public void setDataFim(LocalDateTime dataFim) {
+        this.dataFim = dataFim;
     }
 
     @Override
