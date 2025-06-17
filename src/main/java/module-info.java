@@ -10,6 +10,8 @@ module br.pentatonica.guitarrascrud {
     opens br.pentatonica.guitarrascrud.guitarra to javafx.fxml;
     exports br.pentatonica.guitarrascrud.guitarra;
 
+    opens br.pentatonica.guitarrascrud.leiloes to javafx.base;
+
     opens br.pentatonica.guitarrascrud.usuarios to javafx.base, javafx.fxml;
 
     exports br.pentatonica.guitarrascrud.pagamentos;

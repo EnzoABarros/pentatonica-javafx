@@ -49,10 +49,8 @@ public class GuitarraC{
         Label descricao = new Label("Descrição:");
         TextField descricaoI = new TextField();
 
-        Label captacao = new Label("Captação:");
-        ChoiceBox captacaoI = new ChoiceBox(FXCollections.observableArrayList(
-                "Elétrica", "Acústica", "")
-        );
+        Label categoria = new Label("Categoria:");
+        ChoiceBox categoriaI = new ChoiceBox(FXCollections.observableArrayList("Elétrica", "Acústica"));
 
         Button btnFechar = new Button("Cancelar");
         Button btnAdd = new Button("Adicionar");
@@ -60,14 +58,16 @@ public class GuitarraC{
         btnFechar.setOnAction((event) -> {this.stage.close();});
         btnAdd.setOnAction(actionEvent -> {
             Guitarra g = new Guitarra();
-            try {
+            if(modeloI.getText() != "")
                 g.setModelo(modeloI.getText());
-            } catch (NullPointerException e) {
+            else {
                 erro("O campo Modelo não pode estar vazio!");
                 return;
-            } try {
+            }
+            if(marcaI.getText() != "") {
                 g.setMarca(marcaI.getText());
-            } catch (NullPointerException e) {
+            }
+            else {
                 erro("O campo Marca não pode estar vazio!");
                 return;
             }
@@ -75,11 +75,23 @@ public class GuitarraC{
                 double num = Double.parseDouble(precoI.getText());
                 g.setPreco(num);
             } catch (NumberFormatException e) {
-                erro("Tipo de dado incorreto no campo Preço.");
+                erro("Tipo de dado incorreto no campo Preço!");
                 return;
             }
-            g.setDescricao(descricaoI.getText());
-            g.setCategoria(captacaoI.getValue().toString());
+            if(descricaoI.getText() != "") {
+                g.setDescricao(descricaoI.getText());
+            }
+            else {
+                erro("O campo Descrição não pode estar vazio!");
+                return;
+            }
+            if(categoriaI.getValue() != null) {
+                g.setCategoria(categoriaI.getValue().toString());
+            }
+            else {
+                erro("Selecione uma categoria!");
+                return;
+            }
             ArrayList<Guitarra> guitarras = new ArrayList<>();
             File file = new File("guitarras.dat");
             if (file.exists() && file.length() > 0) {
@@ -109,7 +121,7 @@ public class GuitarraC{
         });
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(labelMensagem, modelo, modeloI, marca, marcaI, preco, precoI, descricao, descricaoI, captacao, captacaoI, btnAdd, btnFechar);
+        layout.getChildren().addAll(labelMensagem, modelo, modeloI, marca, marcaI, preco, precoI, descricao, descricaoI, categoria, categoriaI, btnAdd, btnFechar);
         this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
     }

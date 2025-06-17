@@ -46,8 +46,8 @@ public class Pentatonica {
         });
 
         leiloes.setOnAction((e) -> {
-            //LeiloesMain a = new LeiloesMain(this.stage);
-            //a.mostrar();
+            LeiloesMain a = new LeiloesMain(this.stage);
+            a.mostrar();
         });
         usuarios.setOnAction((e) -> {
            UsuariosMain a = new UsuariosMain(this.stage);

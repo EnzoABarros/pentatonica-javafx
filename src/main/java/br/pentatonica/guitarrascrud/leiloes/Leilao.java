@@ -1,11 +1,9 @@
 package br.pentatonica.guitarrascrud.leiloes;
 
-import br.pentatonica.guitarrascrud.guitarra.Guitarra;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-public class Leilao{
+public class Leilao implements Serializable{
     private String nome;
     private String descricao;
     private double lanceInicial;
