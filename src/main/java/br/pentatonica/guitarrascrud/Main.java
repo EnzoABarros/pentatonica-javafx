@@ -10,7 +10,8 @@ public class Main extends Application{
     }
 
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage)
+    {
         Pentatonica p = new Pentatonica(stage);
         p.mostrar();
     }

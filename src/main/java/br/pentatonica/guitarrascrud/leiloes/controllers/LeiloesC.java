@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class LeiloesC {
@@ -35,19 +36,19 @@ public class LeiloesC {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(this.stageOwner);
 
-        Label titulo = new Label("Novo Leilão");
-        titulo.setFont(new Font("Arial", 26));
+        Label label = new Label("Novo Leilão");
+        label.setFont(new Font("Arial", 26));
 
+        Label titulo = new Label("Título:");
         TextField nomeInput = new TextField();
-        nomeInput.setPromptText("Nome do Leilão");
 
+        Label lance = new Label("Lance inicial:");
         TextField lanceInput = new TextField();
-        lanceInput.setPromptText("Lance Inicial");
 
+        Label descricao = new Label("Descrição:");
         TextField descricaoInput = new TextField();
-        descricaoInput.setPromptText("Descrição");
 
-        Label dataLabel = new Label("Data");
+        Label data = new Label("Data");
         DatePicker dataPicker = new DatePicker();
         dataPicker.setPromptText("Selecione a data");
 
@@ -61,22 +62,13 @@ public class LeiloesC {
             leilao.setNome(nomeInput.getText());
             try {
                 double num = Double.parseDouble(lanceInput.getText());
+                leilao.setLanceInicial(num);
+            } catch (NumberFormatException ex) {
+                erro("Tipo de dado incorreto no campo Lance Inicial");
             }
             leilao.setDescricao(descricaoInput.getText());
-
-            try {
-                double preco = Double.parseDouble(lanceInput.getText());
-                leilao.setLanceInicial(preco);
-            } catch (NumberFormatException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Erro");
-                alert.setContentText("Lance inicial inválido.");
-                alert.showAndWait();
-                return;
-            }
-
-            leilao.setGuitarras(new ArrayList<>(listView.getSelectionModel().getSelectedItems()));
-
+            LocalDate dataSel = dataPicker.getValue();
+            leilao.setDataFim(dataSel.atStartOfDay());
             ArrayList<Leilao> leiloes = new ArrayList<>();
             File file = new File("leiloes.dat");
             if (file.exists() && file.length() > 0) {
@@ -103,10 +95,18 @@ public class LeiloesC {
 
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(titulo, nomeInput, lanceInput, descricaoInput, new Label("Selecionar Guitarras:"), listView, btnSalvar);
+        layout.getChildren().addAll(label, titulo, nomeInput, lance, lanceInput, descricao, descricaoInput, data, dataPicker, btnCriar, btnFechar);
 
-        this.cena = new Scene(layout, 500, 600);
+        this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
+    }
+
+    private static void erro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText("Erro");
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }
 

@@ -1,11 +1,9 @@
 package br.pentatonica.guitarrascrud.guitarra.controllers;
 
 import br.pentatonica.guitarrascrud.guitarra.Guitarra;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -62,14 +60,19 @@ public class GuitarraU {
         descricaoI.setText(guitarra.getDescricao());
 
         Label categoria = new Label("Categoria:");
-        TextField categoriaI = new TextField();
-        categoriaI.setText(guitarra.getCategoria());
+        ChoiceBox categoriaI = new ChoiceBox(FXCollections.observableArrayList("Elétrica", "Acústica"));
+        categoriaI.setValue(guitarra.getCategoria());
 
         Button btnFechar = new Button("Cancelar");
         Button btnEdit = new Button("Atualizar");
 
         btnFechar.setOnAction((event) -> {this.stage.close();});
         btnEdit.setOnAction(actionEvent -> {
+
+            if (modeloI.getText().isEmpty() || marcaI.getText().isEmpty() || precoI.getText().isEmpty() || descricaoI.getText().isEmpty()) {
+                erro("Por favor, preencha todos os campos.");
+                return;
+            }
             ArrayList<Guitarra> guitarras = new ArrayList<>();
             File file = new File("guitarras.dat");
             if (file.exists() && file.length() > 0) {
@@ -81,25 +84,23 @@ public class GuitarraU {
             }
             guitarras.removeIf(g -> Objects.equals(guitarra.getModelo(), g.getModelo()));
 
+
             guitarra.setModelo(modeloI.getText());
             guitarra.setMarca(marcaI.getText());
-            while(true){
-                try {
-                    double num = Double.parseDouble(precoI.getText());
-                    guitarra.setPreco(num);
-                    break;
-                } catch (NumberFormatException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erro");
-                    alert.setHeaderText("Erro");
-                    alert.setContentText("Tipo de dado incorreto no campo Preço.");
-                    alert.showAndWait();
+            try {
+                double num = Double.parseDouble(precoI.getText());
+                guitarra.setPreco(num);
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Erro");
+                alert.setContentText("Tipo de dado incorreto no campo Preço.");
+                alert.showAndWait();
 
-                    return;
-                }
+                return;
             }
             guitarra.setDescricao(descricaoI.getText());
-            guitarra.setCategoria(categoriaI.getText());
+            guitarra.setCategoria(categoriaI.getValue().toString());
             guitarras.add(guitarra);
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("guitarras.dat"));
@@ -121,5 +122,13 @@ public class GuitarraU {
         layout.getChildren().addAll(labelMensagem, modelo, modeloI, marca, marcaI, preco, precoI, descricao, descricaoI, categoria, categoriaI, btnEdit, btnFechar);
         this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
+    }
+
+    private static void erro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText("Erro");
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }

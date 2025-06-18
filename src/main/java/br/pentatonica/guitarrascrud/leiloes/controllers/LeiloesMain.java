@@ -5,13 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.scene.control.cell.PropertyValueFactory;
-import br.pentatonica.guitarrascrud.guitarra.Guitarra;
-import br.pentatonica.guitarrascrud.guitarra.controllers.GuitarrasMain;
 import br.pentatonica.guitarrascrud.leiloes.controllers.LeiloesC;
 import br.pentatonica.guitarrascrud.leiloes.controllers.LeiloesD;
 
@@ -20,11 +18,12 @@ import java.util.ArrayList;
 
 public class LeiloesMain {
     private Stage stage;
+    private Stage stageOwner;
     private Scene cena;
     private TableView<Leilao> tabela = new TableView<>();
 
     public LeiloesMain(Stage stage) {
-        this.stage = stage;
+        this.stageOwner = stageOwner;
     }
 
     public void mostrar() {
@@ -33,7 +32,12 @@ public class LeiloesMain {
     }
 
     private void criarUI() {
+        this.stage = new Stage();
+
         stage.setTitle("Pentatonica - Leilões");
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(this.stageOwner);
 
         VBox layout = new VBox();
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
@@ -51,52 +55,11 @@ public class LeiloesMain {
         TableColumn<Leilao, Double> lanceCol = new TableColumn<>("Lance Inicial");
         lanceCol.setCellValueFactory(new PropertyValueFactory<>("lanceInicial"));
 
-        TableColumn<Leilao, String> marcaCol = new TableColumn<>("Marca");
-        marcaCol.setCellValueFactory(celula -> {
-            if (!celula.getValue().getGuitarras().isEmpty()) {
-                return new ReadOnlyStringWrapper(celula.getValue().getGuitarras().get(0).getMarca());
-            } else {
-                return new ReadOnlyStringWrapper("N/A");
-            }
-        });
-
-        TableColumn<Leilao, String> modeloCol = new TableColumn<>("Modelo");
-        modeloCol.setCellValueFactory(celula -> {
-            if (!celula.getValue().getGuitarras().isEmpty()) {
-                return new ReadOnlyStringWrapper(celula.getValue().getGuitarras().get(0).getModelo());
-            } else {
-                return new ReadOnlyStringWrapper("N/A");
-            }
-        });
+        TableColumn<Leilao, String> dataFimCol = new TableColumn<>("Data fim");
+        dataFimCol.setCellValueFactory(new PropertyValueFactory<>("dataFim"));
 
         tabela.setEditable(false);
-        tabela.getColumns().addAll(nomeCol, descricaoCol, lanceCol, marcaCol, modeloCol);
-
-        // Largura proporcional das colunas
-        nomeCol.prefWidthProperty().bind(tabela.widthProperty().multiply(0.15));
-        descricaoCol.prefWidthProperty().bind(tabela.widthProperty().multiply(0.40));
-        lanceCol.prefWidthProperty().bind(tabela.widthProperty().multiply(0.15));
-        marcaCol.prefWidthProperty().bind(tabela.widthProperty().multiply(0.15));
-        modeloCol.prefWidthProperty().bind(tabela.widthProperty().multiply(0.15));
-
-        // Quebra de linha na descrição
-        descricaoCol.setCellFactory(tc -> {
-            TableCell<Leilao, String> cell = new TableCell<>() {
-                private final Text text = new Text();
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setGraphic(null);
-                    } else {
-                        text.setText(item);
-                        text.wrappingWidthProperty().bind(descricaoCol.widthProperty().subtract(10));
-                        setGraphic(text);
-                    }
-                }
-            };
-            return cell;
-        });
+        tabela.getColumns().addAll(nomeCol, descricaoCol, lanceCol, dataFimCol);
 
         carregarLeiloes();
 

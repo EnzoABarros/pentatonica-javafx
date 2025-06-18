@@ -40,24 +40,6 @@ public class LeiloesU {
         TextField lanceInput = new TextField(String.valueOf(leilao.getLanceInicial()));
         TextField descricaoInput = new TextField(leilao.getDescricao());
 
-        ListView<Guitarra> listView = new ListView<>();
-        ArrayList<Guitarra> todasGuitarras = new ArrayList<>();
-        File fileG = new File("guitarras.dat");
-        if (fileG.exists() && fileG.length() > 0) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileG))) {
-                todasGuitarras = (ArrayList<Guitarra>) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        ObservableList<Guitarra> obsList = FXCollections.observableArrayList(todasGuitarras);
-        listView.setItems(obsList);
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        listView.getSelectionModel().clearSelection();
-        for (Guitarra g : leilao.getGuitarras()) {
-            listView.getSelectionModel().select(g);
-        }
 
         Button salvar = new Button("Salvar");
         salvar.setOnAction(e -> {
@@ -68,7 +50,6 @@ public class LeiloesU {
             } catch (NumberFormatException ex) {
                 return;
             }
-            leilao.setGuitarras(new ArrayList<>(listView.getSelectionModel().getSelectedItems()));
 
             File file = new File("leiloes.dat");
             if (file.exists() && file.length() > 0) {
@@ -92,7 +73,7 @@ public class LeiloesU {
 
         VBox layout = new VBox(10);
         layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
-        layout.getChildren().addAll(new Label("Nome:"), nomeInput, new Label("Lance Inicial:"), lanceInput, new Label("Descrição:"), descricaoInput, new Label("Guitarras:"), listView, salvar);
+        layout.getChildren().addAll(new Label("Nome:"), nomeInput, new Label("Lance Inicial:"), lanceInput, new Label("Descrição:"), descricaoInput, salvar);
 
         this.cena = new Scene(layout, 500, 600);
         this.stage.setScene(this.cena);
