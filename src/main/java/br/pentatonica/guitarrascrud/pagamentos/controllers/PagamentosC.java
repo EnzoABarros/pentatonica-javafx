@@ -20,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class PagamentosC {
@@ -60,7 +61,7 @@ public class PagamentosC {
 
         Label dataLabel = new Label("Data (se não preencher, usa agora):");
         DatePicker dataPicker = new DatePicker();
-        dataPicker.setPromptText("Selecione a data");
+        dataPicker.setPromptText("DD/MM/AAAA");
 
         Button btnFechar = new Button("Cancelar");
         Button btnAdd = new Button("Adicionar");
@@ -73,11 +74,17 @@ public class PagamentosC {
                 erro("O campo Título não pode estar vazio!");
                 return;
             }
+
             String email = emailI.getText();
             if (email == null || email.trim().isEmpty()) {
                 erro("O campo E-mail não pode estar vazio!");
                 return;
             }
+            if (!email.contains("@")) {
+                erro("O campo E-mail deve conter um '@'.");
+                return;
+            }
+
             double preco;
             try {
                 preco = Double.parseDouble(precoI.getText());
@@ -85,15 +92,29 @@ public class PagamentosC {
                 erro("Tipo de dado incorreto no campo Preço.");
                 return;
             }
+
             String status = statusI.getText();
             if (status == null || status.trim().isEmpty()) {
                 erro("O campo Status não pode estar vazio!");
                 return;
             }
+
             LocalDateTime dataHora;
-            LocalDate dataSel = dataPicker.getValue();
-            if (dataSel != null) {
-                dataHora = dataSel.atStartOfDay();
+            String dataTexto = dataPicker.getEditor().getText();
+
+            if (dataTexto != null && !dataTexto.trim().isEmpty()) {
+                if (!dataTexto.matches("^\\d{2}/\\d{2}/\\d{4}$")) {
+                    erro("Data inválida! O formato deve ser DD/MM/AAAA e não pode conter letras.");
+                    return;
+                }
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate dataSel = LocalDate.parse(dataTexto, formatter);
+                    dataHora = dataSel.atStartOfDay();
+                } catch (Exception e) {
+                    erro("Data inválida! O formato deve ser DD/MM/AAAA e não pode conter letras.");
+                    return;
+                }
             } else {
                 dataHora = LocalDateTime.now();
             }
@@ -112,6 +133,8 @@ public class PagamentosC {
                     pagamentos = (ArrayList<Pagamento>) ois.readObject();
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
+                    erro("Erro ao carregar os pagamentos existentes.");
+                    return;
                 }
             }
 
