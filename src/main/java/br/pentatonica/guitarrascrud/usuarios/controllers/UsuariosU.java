@@ -100,4 +100,12 @@ public class UsuariosU {
         this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
     }
+
+    private static void erro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText("Erro");
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
 }

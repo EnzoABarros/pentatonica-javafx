@@ -58,11 +58,33 @@ public class UsuariosC{
         btnFechar.setOnAction((event) -> {this.stage.close();});
         btnAdd.setOnAction(actionEvent -> {
             Usuario u = new Usuario();
-            u.setNome(nomeI.getText());
-            u.setEmail(emailI.getText());
-            u.setSenha(senhaI.getText());
-            u.setCPF(CPFI.getText());
-
+            if(!nomeI.getText().trim().isEmpty())
+                u.setNome(nomeI.getText());
+            else {
+                erro("Preencha o campo Nome.");
+                return;
+            }
+            if(!CPFI.getText().trim().isEmpty()) {
+                u.setCPF(CPFI.getText());
+            }
+            else {
+                erro("Preencha o campo CPF.");
+                return;
+            }
+            if(!emailI.getText().trim().isEmpty()) {
+                u.setEmail(emailI.getText());
+            }
+            else {
+                erro("Preencha o campo Email.");
+                return;
+            }
+            if(!senhaI.getText().trim().isEmpty()) {
+                u.setSenha(senhaI.getText());
+            }
+            else {
+                erro("Preencha o campo senha.");
+                return;
+            }
             ArrayList<Usuario> usuarios = new ArrayList<>();
             File file = new File("usuarios.dat");
             if (file.exists() && file.length() > 0) {
@@ -95,5 +117,13 @@ public class UsuariosC{
         layout.getChildren().addAll(labelMensagem, nome, nomeI, CPF, CPFI, email, emailI, senha, senhaI, btnAdd, btnFechar);
         this.cena = new Scene(layout, 500, 700);
         this.stage.setScene(this.cena);
+    }
+
+    private static void erro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setHeaderText("Erro");
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }
