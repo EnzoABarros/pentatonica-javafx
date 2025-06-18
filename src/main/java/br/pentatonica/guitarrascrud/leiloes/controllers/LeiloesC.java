@@ -56,19 +56,45 @@ public class LeiloesC {
         Button btnFechar = new Button("Cancelar");
 
         btnFechar.setOnAction((event) -> this.stage.close());
-
-        btnCriar.setOnAction(e -> {
+        btnCriar.setOnAction(actionEvent -> {
             Leilao leilao = new Leilao();
-            leilao.setNome(nomeInput.getText());
+
+            if(nomeInput.getText() != "")
+                leilao.setNome(nomeInput.getText());
+            else {
+                erro("O campo Titulo não pode estar vazio!");
+                return;
+            }
+//137 205 206 136 132 133 129 125 122 121
+//------------------------------------------------------
+
             try {
                 double num = Double.parseDouble(lanceInput.getText());
                 leilao.setLanceInicial(num);
             } catch (NumberFormatException ex) {
                 erro("Tipo de dado incorreto no campo Lance Inicial");
+                return;
             }
+
+
+            if(descricaoInput.getText() != "")
+                leilao.setNome(descricaoInput.getText());
+            else {
+                erro("O campo Descrição não pode estar vazio!");
+                return;
+            }
+
+
+            if(dataPicker.getValue() != null)
+                leilao.setDataFim(dataPicker.getValue());
+            else {
+                erro("Tipo de dado incorreto no campo Data!");
+                return;
+            }
+
             leilao.setDescricao(descricaoInput.getText());
             LocalDate dataSel = dataPicker.getValue();
-            leilao.setDataFim(dataSel.atStartOfDay());
+            leilao.setDataFim(dataSel);
             ArrayList<Leilao> leiloes = new ArrayList<>();
             File file = new File("leiloes.dat");
             if (file.exists() && file.length() > 0) {
