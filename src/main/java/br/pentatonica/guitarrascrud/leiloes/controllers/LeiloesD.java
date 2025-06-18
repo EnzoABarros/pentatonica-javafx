@@ -1,33 +1,27 @@
 
 package br.pentatonica.guitarrascrud.leiloes.controllers;
 
+import br.pentatonica.guitarrascrud.guitarra.Guitarra;
 import br.pentatonica.guitarrascrud.leiloes.Leilao;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class LeiloesD {
-    private Leilao leilao;
-
-    public LeiloesD(Leilao leilao) {
-        this.leilao = leilao;
-    }
-
-    public void deletar() {
-        File file = new File("leiloes.dat");
-        ArrayList<Leilao> leiloes = new ArrayList<>();
-        if (file.exists() && file.length() > 0) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                leiloes = (ArrayList<Leilao>) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        leiloes.removeIf(l -> l.getNome().equals(leilao.getNome()));
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+    public void deletar(ArrayList<Leilao> leiloes, Leilao leilao) {
+        String nome = leilao.getNome();
+        leiloes.removeIf(l -> Objects.equals(nome, l.getNome()));
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("leiloes.dat"));
             oos.writeObject(leiloes);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Sucesso!");
+            alert.setHeaderText("Sucesso!");
+            alert.setContentText("Leilao deletado com sucesso!");
+            alert.showAndWait();
+            oos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
