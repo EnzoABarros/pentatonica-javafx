@@ -118,6 +118,7 @@ public class LeiloesMain {
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);
+        botoes.setSpacing(15);
 
         layout.getChildren().addAll(label, tabela);
         layout.getChildren().add(botoes);

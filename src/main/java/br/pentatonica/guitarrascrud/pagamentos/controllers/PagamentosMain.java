@@ -97,7 +97,6 @@ public class PagamentosMain {
             });
 
             HBox botoes = new HBox();
-            botoes.setSpacing(10);
 
             Button deletar = new Button("Deletar");
             deletar.setStyle("-fx-padding: 10; -fx-text-fill: rgb(191, 15, 15);");
@@ -143,6 +142,7 @@ public class PagamentosMain {
             });
 
             botoes.getChildren().addAll(adicionar, deletar, editar);
+            botoes.setSpacing(15);
 
             layout.getChildren().addAll(label, table, botoes);
             this.cena = new Scene(layout, 800, 500);

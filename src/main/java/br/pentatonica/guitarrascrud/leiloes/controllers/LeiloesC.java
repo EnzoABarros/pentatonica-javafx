@@ -65,8 +65,6 @@ public class LeiloesC {
                 erro("O campo Titulo não pode estar vazio!");
                 return;
             }
-//137 205 206 136 132 133 129 125 122 121
-//------------------------------------------------------
 
             try {
                 double num = Double.parseDouble(lanceInput.getText());
