@@ -2,11 +2,7 @@ package br.pentatonica.guitarrascrud.pagamentos.controllers;
 
 import br.pentatonica.guitarrascrud.pagamentos.Pagamento;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -67,7 +63,9 @@ public class PagamentosU {
         TextField emailI = new TextField(pagamento.getEmail());
 
         Label statusLabel = new Label("Status:");
-        TextField statusI = new TextField(pagamento.getStatus());
+        ComboBox<String> statusCombo = new ComboBox<>();
+        statusCombo.getItems().addAll("Aprovado", "Recusado", "Processando");
+        statusCombo.setValue(pagamento.getStatus());
 
         Label dataLabel = new Label("Data:");
         DatePicker dataPicker = new DatePicker();
@@ -117,6 +115,7 @@ public class PagamentosU {
                     e.printStackTrace();
                 }
             }
+
             pagamentos.removeIf(p -> Objects.equals(pagamento.getTitulo(), p.getTitulo()));
 
             String novoTitulo = tituloI.getText();
@@ -146,9 +145,9 @@ public class PagamentosU {
             }
             pagamento.setEmail(novoEmail);
 
-            String novoStatus = statusI.getText();
+            String novoStatus = statusCombo.getValue();
             if (novoStatus == null || novoStatus.trim().isEmpty()) {
-                erro("O campo Status não pode estar vazio!");
+                erro("Você deve selecionar um status!");
                 return;
             }
             pagamento.setStatus(novoStatus);
@@ -183,7 +182,7 @@ public class PagamentosU {
                 tituloLabel, tituloI,
                 precoLabel, precoI,
                 emailLabel, emailI,
-                statusLabel, statusI,
+                statusLabel, statusCombo,
                 dataLabel, dataPicker,
                 btnEdit, btnFechar
         );

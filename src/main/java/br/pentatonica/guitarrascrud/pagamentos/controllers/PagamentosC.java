@@ -2,11 +2,7 @@ package br.pentatonica.guitarrascrud.pagamentos.controllers;
 
 import br.pentatonica.guitarrascrud.pagamentos.Pagamento;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -57,7 +53,9 @@ public class PagamentosC {
         TextField emailI = new TextField();
 
         Label statusLabel = new Label("Status:");
-        TextField statusI = new TextField();
+        ComboBox<String> statusCombo = new ComboBox<>();
+        statusCombo.getItems().addAll("Aprovado", "Recusado", "Processando");
+        statusCombo.setPromptText("Selecione o status");
 
         Label dataLabel = new Label("Data (se não preencher, usa agora):");
         DatePicker dataPicker = new DatePicker();
@@ -93,9 +91,9 @@ public class PagamentosC {
                 return;
             }
 
-            String status = statusI.getText();
+            String status = statusCombo.getValue();
             if (status == null || status.trim().isEmpty()) {
-                erro("O campo Status não pode estar vazio!");
+                erro("Você deve selecionar um status!");
                 return;
             }
 
@@ -160,7 +158,7 @@ public class PagamentosC {
                 tituloLabel, tituloI,
                 precoLabel, precoI,
                 emailLabel, emailI,
-                statusLabel, statusI,
+                statusLabel, statusCombo,
                 dataLabel, dataPicker,
                 btnAdd, btnFechar
         );
