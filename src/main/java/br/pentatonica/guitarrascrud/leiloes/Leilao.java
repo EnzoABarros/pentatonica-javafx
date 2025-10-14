@@ -1,13 +1,14 @@
 package br.pentatonica.guitarrascrud.leiloes;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Leilao implements Serializable{
     private String nome;
     private String descricao;
     private double lanceInicial;
-    private LocalDateTime dataFim;
+    private LocalDate dataFim;
 
     public Leilao() {
     }
@@ -36,11 +37,11 @@ public class Leilao implements Serializable{
         this.lanceInicial = lanceInicial;
     }
 
-    public LocalDateTime getDataFim() {
+    public LocalDate getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(LocalDateTime dataFim) {
+    public void setDataFim(LocalDate dataFim) {
         this.dataFim = dataFim;
     }
 

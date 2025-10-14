@@ -113,6 +113,7 @@ public class GuitarrasMain {
         });
 
         botoes.getChildren().addAll(adicionar, deletar, editar);
+        botoes.setSpacing(15);
 
         layout.getChildren().addAll(label, table);
         layout.getChildren().add(botoes);

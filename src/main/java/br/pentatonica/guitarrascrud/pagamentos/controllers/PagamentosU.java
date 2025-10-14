@@ -2,11 +2,7 @@ package br.pentatonica.guitarrascrud.pagamentos.controllers;
 
 import br.pentatonica.guitarrascrud.pagamentos.Pagamento;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -20,6 +16,8 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -65,10 +63,14 @@ public class PagamentosU {
         TextField emailI = new TextField(pagamento.getEmail());
 
         Label statusLabel = new Label("Status:");
-        TextField statusI = new TextField(pagamento.getStatus());
+        ComboBox<String> statusCombo = new ComboBox<>();
+        statusCombo.getItems().addAll("Aprovado", "Recusado", "Processando");
+        statusCombo.setValue(pagamento.getStatus());
 
         Label dataLabel = new Label("Data:");
         DatePicker dataPicker = new DatePicker();
+        dataPicker.setPromptText("DD/MM/AAAA");
+
         try {
             LocalDateTime dt = pagamento.getData();
             if (dt != null) {
@@ -76,6 +78,27 @@ public class PagamentosU {
             }
         } catch (Exception e) {
         }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        dataPicker.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                String texto = dataPicker.getEditor().getText();
+                if (texto == null || texto.trim().isEmpty()) {
+                    dataPicker.setValue(null);
+                    return;
+                }
+                try {
+                    LocalDate data = LocalDate.parse(texto, formatter);
+                    dataPicker.setValue(data);
+                } catch (DateTimeParseException e) {
+                    erro("Data inválida! Use o formato DD/MM/AAAA e não use letras.");
+                    dataPicker.getEditor().clear();
+                    dataPicker.setValue(null);
+                    dataPicker.requestFocus();
+                }
+            }
+        });
 
         Button btnFechar = new Button("Cancelar");
         Button btnEdit = new Button("Atualizar");
@@ -92,6 +115,7 @@ public class PagamentosU {
                     e.printStackTrace();
                 }
             }
+
             pagamentos.removeIf(p -> Objects.equals(pagamento.getTitulo(), p.getTitulo()));
 
             String novoTitulo = tituloI.getText();
@@ -106,11 +130,7 @@ public class PagamentosU {
                 novoPreco = Double.parseDouble(precoI.getText());
                 pagamento.setPreco(novoPreco);
             } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erro");
-                alert.setHeaderText("Erro");
-                alert.setContentText("Tipo de dado incorreto no campo Preço.");
-                alert.showAndWait();
+                erro("Tipo de dado incorreto no campo Preço.");
                 return;
             }
 
@@ -119,11 +139,15 @@ public class PagamentosU {
                 erro("O campo E-mail não pode estar vazio!");
                 return;
             }
+            if (!novoEmail.contains("@")) {
+                erro("O campo E-mail deve conter um '@'.");
+                return;
+            }
             pagamento.setEmail(novoEmail);
 
-            String novoStatus = statusI.getText();
+            String novoStatus = statusCombo.getValue();
             if (novoStatus == null || novoStatus.trim().isEmpty()) {
-                erro("O campo Status não pode estar vazio!");
+                erro("Você deve selecionar um status!");
                 return;
             }
             pagamento.setStatus(novoStatus);
@@ -131,6 +155,9 @@ public class PagamentosU {
             LocalDate dataSel = dataPicker.getValue();
             if (dataSel != null) {
                 pagamento.setData(dataSel.atStartOfDay());
+            } else {
+                erro("Data inválida ou não preenchida! Use o formato DD/MM/AAAA.");
+                return;
             }
 
             pagamentos.add(pagamento);
@@ -155,7 +182,7 @@ public class PagamentosU {
                 tituloLabel, tituloI,
                 precoLabel, precoI,
                 emailLabel, emailI,
-                statusLabel, statusI,
+                statusLabel, statusCombo,
                 dataLabel, dataPicker,
                 btnEdit, btnFechar
         );
