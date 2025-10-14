@@ -10,6 +10,7 @@ public class Pagamento implements Serializable {
     private double preco;
     private String email;
     private String status;
+    private String tipoPagamento;
     private LocalDateTime data;
 
     public Pagamento() {}
@@ -26,8 +27,12 @@ public class Pagamento implements Serializable {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
+    public String getTipoPagamento() { return tipoPagamento; }
+    public void setTipoPagamento(String tipoPagamento) { this.tipoPagamento = tipoPagamento; }
+
     public LocalDateTime getData() { return data; }
     public void setData(LocalDateTime data) { this.data = data; }
+
 
     @Override
     public String toString() {
@@ -36,6 +41,7 @@ public class Pagamento implements Serializable {
                 ", preco=" + preco +
                 ", email='" + email + '\'' +
                 ", status='" + status + '\'' +
+                ", tipoPagamento='" + tipoPagamento + '\'' +
                 ", data=" + data +
                 '}';
     }

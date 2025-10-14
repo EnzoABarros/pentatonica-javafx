@@ -1,12 +1,9 @@
 package br.pentatonica.guitarrascrud.pagamentos.controllers;
 
 import br.pentatonica.guitarrascrud.pagamentos.Pagamento;
+import br.pentatonica.guitarrascrud.pagamentos.metodos.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -67,7 +64,59 @@ public class PagamentosMain {
         TableColumn<Pagamento, String> dataCol = new TableColumn<>("Data");
         dataCol.setCellValueFactory(new PropertyValueFactory<>("data"));
 
-        table.getColumns().addAll(tituloCol, precoCol, emailCol, statusCol, dataCol);
+        // Coluna de botão "Pagar"
+        TableColumn<Pagamento, Void> pagarCol = new TableColumn<>("Ação");
+
+        pagarCol.setCellFactory(col -> new TableCell<>() {
+            private final Button btn = new Button("Pagar");
+
+            {
+                btn.setStyle("-fx-padding: 5; -fx-text-fill: green;");
+
+                btn.setOnAction(e -> {
+                    Pagamento pagamento = getTableView().getItems().get(getIndex());
+
+                    MetodoPagamento online = new PagamentoOnline();
+                    PagamentoBase metodo;
+                    String tipo = pagamento.getTipoPagamento();
+                    if (tipo == null) {
+                        tipo = "Cartao"; // valor padrão
+                        pagamento.setTipoPagamento(tipo);
+                    }
+
+                    if (tipo.equalsIgnoreCase("Pix")) {
+                        metodo = new Pix(online);
+                    } else {
+                        metodo = new CartaoCredito(online);
+                    }
+
+                    metodo.realizarPagamento(pagamento.getPreco());
+
+                    pagamento.setStatus("Pago");
+
+                    getTableView().refresh();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Pagamento Simulado");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Pagamento de R$" + pagamento.getPreco() + " realizado!");
+                    alert.showAndWait();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+        });
+
+
+        table.getColumns().addAll(tituloCol, precoCol, emailCol, statusCol, dataCol, pagarCol);
 
         ArrayList<Pagamento> pagamentos = new ArrayList<>();
         File file = new File("pagamentos.dat");
@@ -126,8 +175,27 @@ public class PagamentosMain {
             edit.mostrar(selecionado);
             atualizarTabela(file);
         });
+        Button simularPagamento = new Button("Simular Pagamento");
+        simularPagamento.setStyle("-fx-padding: 10; -fx-text-fill: rgb(0, 128, 255);");
+        simularPagamento.setOnAction(e -> {
+            // Simulação Bridge
+            MetodoPagamento online = new PagamentoOnline();
 
-        botoes.getChildren().addAll(adicionar, deletar, editar);
+            PagamentoBase pix = new Pix(online);
+            pix.realizarPagamento(250.0);
+
+            PagamentoBase cartao = new CartaoCredito(online);
+            cartao.realizarPagamento(1200.0);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Simulação de Pagamento");
+            alert.setHeaderText(null);
+            alert.setContentText("Simulação de Pix e Cartão realizada! Confira o console.");
+            alert.showAndWait();
+        });
+
+
+        botoes.getChildren().addAll(adicionar, deletar, editar, simularPagamento);
 
         layout.getChildren().addAll(label, table, botoes);
         this.cena = new Scene(layout, 800, 500);

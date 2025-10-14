@@ -2,11 +2,7 @@ package br.pentatonica.guitarrascrud.pagamentos.controllers;
 
 import br.pentatonica.guitarrascrud.pagamentos.Pagamento;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -55,8 +51,10 @@ public class PagamentosC {
         Label emailLabel = new Label("E-mail:");
         TextField emailI = new TextField();
 
-        Label statusLabel = new Label("Status:");
-        TextField statusI = new TextField();
+        Label tipoLabel = new Label("Tipo de Pagamento:");
+        ChoiceBox<String> tipoBox = new ChoiceBox<>();
+        tipoBox.getItems().addAll("Pix", "Cartao");
+        tipoBox.setValue("Pix"); // valor padrão
 
         Label dataLabel = new Label("Data (se não preencher, usa agora):");
         DatePicker dataPicker = new DatePicker();
@@ -85,11 +83,6 @@ public class PagamentosC {
                 erro("Tipo de dado incorreto no campo Preço.");
                 return;
             }
-            String status = statusI.getText();
-            if (status == null || status.trim().isEmpty()) {
-                erro("O campo Status não pode estar vazio!");
-                return;
-            }
             LocalDateTime dataHora;
             LocalDate dataSel = dataPicker.getValue();
             if (dataSel != null) {
@@ -102,7 +95,7 @@ public class PagamentosC {
             p.setTitulo(titulo);
             p.setPreco(preco);
             p.setEmail(email);
-            p.setStatus(status);
+            p.setStatus("Pendente");
             p.setData(dataHora);
 
             ArrayList<Pagamento> pagamentos = new ArrayList<>();
@@ -137,7 +130,7 @@ public class PagamentosC {
                 tituloLabel, tituloI,
                 precoLabel, precoI,
                 emailLabel, emailI,
-                statusLabel, statusI,
+                tipoLabel, tipoBox,
                 dataLabel, dataPicker,
                 btnAdd, btnFechar
         );
